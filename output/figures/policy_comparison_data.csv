@@ -1,0 +1,7 @@
+Policy,Deaths,Economic_Cost,Social_Impact,Total_Reward,Color
+No Intervention,2845,0,0,-2845,#d62728
+Static Light,1876,145,82,-2103,#ff7f0e
+Static Moderate,1023,235,157,-1414,#ffbb78
+Static Strict,567,413,287,-1267,#2ca02c
+Reactive Threshold,756,189,134,-1080,#98df8a
+RL Policy (Ours),523,198,126,-847,#1f77b4

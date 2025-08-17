@@ -1,0 +1,30 @@
+# Simple Makefile for RL Experiments
+CXX = g++
+CXXFLAGS = -std=c++14 -Wall -Wextra -O2
+
+# Source files
+SIMPLE_SOURCES = Person.cpp Population.cpp SimpleRLExperiments.cpp
+SIMPLE_OBJECTS = $(SIMPLE_SOURCES:.cpp=.o)
+SIMPLE_TARGET = simple_rl_experiments
+
+# Build target
+simple-rl: $(SIMPLE_OBJECTS)
+	@echo "Linking $(SIMPLE_TARGET)..."
+	$(CXX) $(CXXFLAGS) -o $(SIMPLE_TARGET) $(SIMPLE_OBJECTS)
+	@echo "Build complete: $(SIMPLE_TARGET)"
+
+# Object files
+%.o: %.cpp
+	@echo "Compiling $<..."
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Run experiments
+run-simple: $(SIMPLE_TARGET)
+	@echo "Running simple RL experiments..."
+	./$(SIMPLE_TARGET)
+
+# Clean
+clean:
+	rm -f $(SIMPLE_OBJECTS) $(SIMPLE_TARGET) *.csv
+
+.PHONY: simple-rl run-simple clean

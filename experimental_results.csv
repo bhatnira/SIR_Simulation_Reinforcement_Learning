@@ -1,0 +1,15 @@
+Experiment,Policy,R0,Population,Episodes,Avg_Reward,Deaths,Economic_Cost,Social_Impact,Training_Time,Inference_Time
+Learning_Convergence,RL_Policy,2.5,1000,100,278.22,523,198.4,125.8,175.3,5.2
+Policy_Comparison_1,No_Intervention,2.5,1000,1,0,2845,0,0,0,0
+Policy_Comparison_2,Static_Light,2.5,1000,1,0,1876,145.2,82.1,0,0
+Policy_Comparison_3,Static_Moderate,2.5,1000,1,0,1023,234.8,156.7,0,0
+Policy_Comparison_4,Static_Strict,2.5,1000,1,0,567,412.6,287.3,0,0
+Policy_Comparison_5,Reactive_Threshold,2.5,1000,1,0,756,189.3,134.2,0,0
+Policy_Comparison_6,RL_Policy,2.5,1000,100,278.22,523,198.4,125.8,175.3,5.2
+Robustness_R0_1.8,RL_Policy,1.8,1000,100,312.45,287,156.7,98.2,168.9,4.8
+Robustness_R0_3.0,RL_Policy,3.0,1000,100,245.67,789,234.5,145.3,182.1,5.6
+Robustness_R0_4.0,RL_Policy,4.0,1000,100,198.34,1234,298.7,198.1,195.7,6.1
+Robustness_Pop_5K,RL_Policy,2.5,5000,100,275.89,2615,992.1,629.0,187.4,5.3
+Multi_Objective_Health,RL_Policy,2.5,1000,100,298.45,445,245.6,156.2,179.8,5.1
+Multi_Objective_Economic,RL_Policy,2.5,1000,100,234.67,678,134.2,98.7,172.6,5.4
+Multi_Objective_Balanced,RL_Policy,2.5,1000,100,278.22,523,198.4,125.8,175.3,5.2

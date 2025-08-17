@@ -1,0 +1,69 @@
+# Makefile for SIR Epidemic Simulation with Bayesian Analysis
+
+# Compiler and tools
+CXX = g++
+CXXFLAGS = -std=c++14 -Wall -Wextra -Wpedantic -O2
+DEBUGFLAGS = -g -DDEBUG -O0
+
+# Target executables
+TARGET = sir_simulation
+BAYESIAN_TARGET = bayesian_sir
+
+# Source files and headers
+SOURCES = Person.cpp Population.cpp SIRSimulation.cpp
+BAYESIAN_SOURCES = Person.cpp Population.cpp BayesianSIR.cpp BayesianExample.cpp
+HEADERS = Person.h Population.h Simulation.h BayesianSIR.h
+OBJECTS = $(SOURCES:.cpp=.o)
+BAYESIAN_OBJECTS = $(BAYESIAN_SOURCES:.cpp=.o)
+
+# Default target
+all: $(TARGET) $(BAYESIAN_TARGET)
+
+# Individual build targets
+sir: $(TARGET)
+
+bayesian: $(BAYESIAN_TARGET)
+
+# Build the standard simulation executable
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# Build the Bayesian simulation executable
+$(BAYESIAN_TARGET): $(BAYESIAN_OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# Build object files
+%.o: %.cpp $(HEADERS)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Debug build
+debug: CXXFLAGS += $(DEBUGFLAGS)
+debug: clean all
+
+# Run the standard simulation
+run: $(TARGET)
+	./$(TARGET)
+
+# Run the Bayesian simulation
+run-bayesian: $(BAYESIAN_TARGET)
+	./$(BAYESIAN_TARGET)
+
+# Clean build artifacts
+clean:
+	rm -f $(OBJECTS) $(BAYESIAN_OBJECTS) $(TARGET) $(BAYESIAN_TARGET) *.csv
+
+# Rebuild everything
+rebuild: clean all
+
+# Show help
+help:
+	@echo "Available targets:"
+	@echo "  all         - Build both simulations (default)"
+	@echo "  sir         - Build standard SIR simulation"
+	@echo "  bayesian    - Build Bayesian SIR analysis"
+	@echo "  run         - Run standard simulation"
+	@echo "  run-bayesian- Run Bayesian analysis"
+	@echo "  clean       - Remove build artifacts"
+	@echo "  help        - Show this help"
+
+.PHONY: all clean rebuild run debug help sir bayesian run-bayesian

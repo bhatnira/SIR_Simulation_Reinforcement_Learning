@@ -1,0 +1,177 @@
+# ===================================================================
+# Makefile for SIR Epidemic Simulation with RL Control Framework
+# Scientific Computing Project
+# ===================================================================
+
+# Compiler and tools
+CXX = g++
+CXXFLAGS = -std=c++14 -Wall -Wextra -Wpedantic -O2
+DEBUGFLAGS = -g -DDEBUG -O0
+LDFLAGS = 
+
+# Directories
+SRCDIR = .
+OBJDIR = obj
+BINDIR = .
+
+# Target executables
+TARGET = sir_simulation
+BAYESIAN_TARGET = bayesian_sir
+RL_TARGET = rl_epidemic_control
+
+# Source files and headers
+SOURCES = Person.cpp Population.cpp SIRSimulation.cpp
+BAYESIAN_SOURCES = Person.cpp Population.cpp BayesianSIR.cpp BayesianExample.cpp
+RL_SOURCES = Person.cpp Population.cpp RLSIR.cpp RLExample.cpp
+HEADERS = Person.h Population.h Simulation.h BayesianSIR.h
+OBJECTS = $(SOURCES:.cpp=.o)
+BAYESIAN_OBJECTS = $(BAYESIAN_SOURCES:.cpp=.o)
+RL_OBJECTS = $(RL_SOURCES:.cpp=.o)
+
+# Version info
+VERSION = 2.0.0
+
+# ===================================================================
+# Build targets
+# ===================================================================
+
+# Default target
+.DEFAULT_GOAL := all
+all: sir bayesian rl
+	@echo "All targets built successfully!"
+	@echo "Standard SIR simulation: ./$(TARGET)"
+	@echo "Bayesian SIR analysis: ./$(BAYESIAN_TARGET)"  
+	@echo "RL epidemic control: ./$(RL_TARGET)"
+
+# Standard SIR simulation
+sir: $(OBJECTS)
+	@echo "Linking $(TARGET)..."
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
+	@echo "Build complete: $(TARGET)"
+
+# Bayesian SIR simulation
+bayesian: $(BAYESIAN_OBJECTS)
+	@echo "Linking $(BAYESIAN_TARGET)..."
+	$(CXX) $(CXXFLAGS) -o $(BAYESIAN_TARGET) $(BAYESIAN_OBJECTS)
+	@echo "Build complete: $(BAYESIAN_TARGET)"
+
+# RL epidemic control simulation
+rl: $(RL_OBJECTS)
+	@echo "Linking $(RL_TARGET)..."
+	$(CXX) $(CXXFLAGS) -o $(RL_TARGET) $(RL_OBJECTS)
+	@echo "Build complete: $(RL_TARGET)"
+
+# Build object files
+%.o: %.cpp $(HEADERS)
+	@echo "Compiling $<..."
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# ===================================================================
+# Development targets
+# ===================================================================
+
+# Debug build
+debug: CXXFLAGS += $(DEBUGFLAGS)
+debug: clean all
+	@echo "Debug build complete"
+
+# Release build with optimizations
+release: CXXFLAGS += -O3 -DNDEBUG
+release: clean all
+	@echo "Release build complete"
+
+# ===================================================================
+# Execution targets
+# ===================================================================
+
+# Run the standard simulation
+run: $(TARGET)
+	@echo "Running SIR simulation..."
+	@echo "=================================="
+	./$(TARGET)
+
+# Run the Bayesian simulation
+run-bayesian: $(BAYESIAN_TARGET)
+	@echo "Running Bayesian SIR analysis..."
+	@echo "=================================="
+	./$(BAYESIAN_TARGET)
+
+# Run the RL epidemic control
+run-rl: $(RL_TARGET)
+	@echo "Running RL epidemic control..."
+	@echo "=================================="
+	./$(RL_TARGET)
+
+# ===================================================================
+# Testing and validation
+# ===================================================================
+
+# Test MCMC components
+test: Person.o Population.o BayesianSIR.o
+	@echo "Running MCMC tests..."
+	$(CXX) $(CXXFLAGS) -DTEST_MODE -o test_mcmc Person.o Population.o BayesianSIR.o
+	./test_mcmc
+
+# Validate all builds
+validate: all
+	@echo "Validating all executables..."
+	@echo "SIR simulation exists: " && test -f $(TARGET) && echo "✓" || echo "✗"
+	@echo "Bayesian analysis exists: " && test -f $(BAYESIAN_TARGET) && echo "✓" || echo "✗"
+	@echo "RL control exists: " && test -f $(RL_TARGET) && echo "✓" || echo "✗"
+
+# ===================================================================
+# Cleanup and maintenance
+# ===================================================================
+
+# Clean build artifacts
+clean:
+	@echo "Cleaning build artifacts..."
+	rm -f *.o $(TARGET) $(BAYESIAN_TARGET) $(RL_TARGET) test_mcmc
+	rm -f *.csv *.model *.log
+	@echo "Clean complete"
+
+# Rebuild everything
+rebuild: clean all
+
+# ===================================================================
+# Documentation and help
+# ===================================================================
+
+# Show help
+help:
+	@echo "Available targets:"
+	@echo "  all          - Build all executables"
+	@echo "  sir          - Build standard SIR simulation"
+	@echo "  bayesian     - Build Bayesian SIR analysis"
+	@echo "  rl           - Build RL epidemic control"
+	@echo "  run          - Run standard simulation"
+	@echo "  run-bayesian - Run Bayesian analysis"
+	@echo "  run-rl       - Run RL control demo"
+	@echo "  test         - Run MCMC tests"
+	@echo "  validate     - Validate all builds"
+	@echo "  debug        - Build with debug flags"
+	@echo "  release      - Build with optimizations"
+	@echo "  clean        - Remove build artifacts"
+	@echo "  rebuild      - Clean and build all"
+	@echo "  help         - Show this help message"
+
+# Show project info
+info:
+	@echo "Project: SIR Epidemic Simulation with RL Control"
+	@echo "Version: $(VERSION)"
+	@echo "Compiler: $(CXX)"
+	@echo "Flags: $(CXXFLAGS)"
+	@echo "Targets: $(TARGET) $(BAYESIAN_TARGET) $(RL_TARGET)"
+
+# Show build status
+status:
+	@echo "Build Status:"
+	@echo -n "Standard SIR: " && (test -f $(TARGET) && echo "Built" || echo "Not built")
+	@echo -n "Bayesian SIR: " && (test -f $(BAYESIAN_TARGET) && echo "Built" || echo "Not built")
+	@echo -n "RL Control:   " && (test -f $(RL_TARGET) && echo "Built" || echo "Not built")
+
+# ===================================================================
+# Special targets
+# ===================================================================
+
+.PHONY: all sir bayesian rl clean rebuild run run-bayesian run-rl test validate debug release help info status

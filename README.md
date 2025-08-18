@@ -168,7 +168,7 @@ If you use this framework in your research, please cite:
 ```bibtex
 @software{sir_rl_framework_2025,
   title={SIR Epidemic Simulation with Reinforcement Learning Control},
-  author={Scientific Computing Team},
+  author={Nirajan Bhattarai},
   year={2025},
   url={https://github.com/bhatnira/ScientificComputing-SIRSimulation},
   version={2.0}
